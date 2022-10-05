@@ -18,8 +18,16 @@
             "commission": "25.0"
         },
         {
+            "id": 2,
+            "commission": "112.5"
+        },
+        {
             "id": 3,
             "commission": "95.0"
+        },
+        {
+            "id": 4,
+            "commission": "105.0"
         },
         {
             "id": 5,
@@ -30,20 +38,12 @@
             "commission": "150.0"
         },
         {
-            "id": 8,
-            "commission": "35.0"
-        },
-        {
-            "id": 2,
-            "commission": "112.5"
-        },
-        {
-            "id": 4,
-            "commission": "105.0"
-        },
-        {
             "id": 7,
             "commission": "45.0"
+        },
+        {
+            "id": 8,
+            "commission": "35.0"
         }
     ]
 }

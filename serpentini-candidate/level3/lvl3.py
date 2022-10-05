@@ -20,8 +20,6 @@ for deal in jsonData["deals"]: # research all months where the user has a deal
     if deal["user"] not in gain:
         gain[deal["user"]] = {}
     gain[deal["user"]][date] = 0.
-    if deal["user"] not in pay:
-        pay[deal["user"]] = {}
 #print(pay)
 for deal in jsonData["deals"]:
     cible = jsonData["users"][deal["user"]-1]["objective"]
@@ -32,19 +30,19 @@ for deal in jsonData["deals"]:
             gain_old = gain[deal["user"]][date]
             gain[deal["user"]][date] += deal["amount"]
             if gain[deal["user"]][date] <= demi_cible:
-                pay[deal["user"]][deal["id"]] = deal["amount"]*0.05
+                pay[deal["id"]] = deal["amount"]*0.05
             elif demi_cible < gain[deal["user"]][date] <= cible:
                 if gain_old > demi_cible:
-                    pay[deal["user"]][deal["id"]] = deal["amount"]*0.1
+                    pay[deal["id"]] = deal["amount"]*0.1
                 else:
-                    pay[deal["user"]][deal["id"]] = (gain[deal["user"]][date]-demi_cible)*0.1 + (demi_cible-gain_old)*0.05
+                    pay[deal["id"]] = (gain[deal["user"]][date]-demi_cible)*0.1 + (demi_cible-gain_old)*0.05
             else:
                 if gain_old > cible:
-                    pay[deal["user"]][deal["id"]] = deal["amount"]*0.15
+                    pay[deal["id"]] = deal["amount"]*0.15
                 elif gain_old > demi_cible:
-                    pay[deal["user"]][deal["id"]] = (gain[deal["user"]][date]-cible)*0.15 + (cible-gain_old)*0.1
+                    pay[deal["id"]] = (gain[deal["user"]][date]-cible)*0.15 + (cible-gain_old)*0.1
                 else:
-                    pay[deal["user"]][deal["id"]] = (gain[deal["user"]][date]-cible)*0.15 + (cible-demi_cible)*0.1 + (demi_cible-gain_old)*0.05
+                    pay[deal["id"]] = (gain[deal["user"]][date]-cible)*0.15 + (cible-demi_cible)*0.1 + (demi_cible-gain_old)*0.05
 print(pay)
 months = []
 for deal in jsonData["deals"]: # research all months where the user has a deal
@@ -58,13 +56,12 @@ for deal in jsonData["deals"]:
     for month in months:
         date = '-'.join(deal["payment_date"].split("-")[0:2])
         if date == month:
-            fiche_paye[deal["user"]][date] += pay[deal["user"]][deal["id"]]
+            fiche_paye[deal["user"]][date] += pay[deal["id"]]
 print(fiche_paye)
 
 userDict = {"commissions": [fiche_paye], "deals": []}
 for id in pay:
-    for deal in pay[id]:
-        userDict["deals"].append({"id": deal, "commission": str(round(pay[id][deal],2))})
+    userDict["deals"].append({"id": id, "commission": str(round(pay[id],2))})
 
 # write out data
 with open('./data/output.json', 'w') as f:
